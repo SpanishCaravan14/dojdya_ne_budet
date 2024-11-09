@@ -1,0 +1,81 @@
+<resources>
+    <string name="app_name">Дождя не будет?</string>
+
+    <string name="api_fetching_error">Проблема с загрузкой данных</string>
+    <string name="no_internet">Отсутствует соединение с интернетом</string>
+    <string name="search_cities_button">Кнопка поиска городов</string>
+    <string name="app_settings_button">Кнопка настроек</string>
+    <string name="atmospheric_pressure_icon">Иконка атмосферного давления</string>
+    <string name="back_button">Назад</string>
+    <string name="next_7_days">На следующей неделе</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="weather_icon">Weather Icon</string>
+
+
+    <!-- Sync Preferences -->
+    <string name="pressure">Давление</string>
+    <string name="wind_speed">Скорость ветра</string>
+    <string name="humidity">Влажность</string>
+    <string name="today">Сегодня</string>
+    <string name="sunset_icon">Sunset icon</string>
+    <string name="sunrise_icon">Sunrise icon</string>
+    <string name="settings">Настройки</string>
+    <string name="units">Единицы измерения</string>
+    <string name="temperature_units">Измеряем температуру</string>
+    <string name="celsius">°C</string>
+    <string name="fahrenheit">°F</string>
+    <string name="wind_speed_units">В чем измерять скорость ветра</string>
+    <string name="hpa">hPa</string>
+    <string name="atm">atm</string>
+    <string name="atmospheric_pressure_units">Измеряем атмосферное давление</string>
+    <string name="meters_per_second">м/с</string>
+    <string name="kilometers_per_hour">км/час</string>
+    <string name="miles_per_hour">миль/час</string>
+    <string name="about">О приложении</string>
+    <string name="feedback">Feedback</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="credits">Credits</string>
+    <string name="other_settings">Прочие настройки</string>
+    <string name="donate_us">Поддержка</string>
+    <string name="cancel">Отменить</string>
+    <string name="search_your_city">Найдите Ваш город</string>
+    <string name="add_remove_button">Add remove button</string>
+    <string name="country">Страна</string>
+    <string name="city">Город</string>
+    <string name="no_locations_found">Локация не найдена</string>
+    <string name="loading">Загрузка…</string>
+    <string name="something_went_wrong">Что-то пошло не так!</string>
+    <string name="error_fetching_weather">Возникла ошибка при загрузке данных о погоде</string>
+    <string name="now">Сейчас</string>
+    <!-- Описание погоды -->
+    <string name="clear">Ясная погода</string>
+    <string name="clear_partly">Частично ясная погода</string>
+    <string name="partly_cloudy">Немного облачно</string>
+    <string name="overcast">Пасмурно</string>
+    <string name="fog">Туман</string>
+    <string name="rime_fog">Инеистый туман</string>
+    <string name="light_drizzle">Слабый моросящий дождь</string>
+    <string name="moderate_drizzle">Умеренный моросящий дождь</string>
+    <string name="heavy_drizzle">Сильная изморось</string>
+    <string name="light_freezing_drizzle">Легкая прохладная изморось</string>
+    <string name="heavy_freezing_drizzle">Сильная прохладная изморось</string>
+    <string name="light_rain">Легкий дождь</string>
+    <string name="moderate_rain">Умеренный дождь</string>
+    <string name="heavy_rain">Проливной дождь</string>
+    <string name="light_freezing_rain">Слабый ледяной дождь</string>
+    <string name="heavy_freezing_rain">Сильный ледяной дождь</string>
+    <string name="light_snow">Легкий снегопад</string>
+    <string name="moderate_snow">Умеренный снегопад</string>
+    <string name="heavy_snow">Сильный снегопад</string>
+    <string name="snow_grains">Снежные зерна</string>
+    <string name="light_rain_showers">Слабый ливневый дождь</string>
+    <string name="moderate_rain_showers">Умеренный ливневый дождь</string>
+    <string name="heavy_rain_showers">Сильный ливневый дождь</string>
+    <string name="light_snow_showers">Слабый снежный дождь</string>
+    <string name="heavy_snow_showers">Сильный снежный дождь</string>
+    <string name="slight_thunderstorm">Легкая гроза</string>
+    <string name="moderate_thunderstorm">Гроза</string>
+    <string name="heavy_thunderstorm">Сильная гроза</string>
+    <string name="wrong_weather_code"></string>
+
+</resources>
