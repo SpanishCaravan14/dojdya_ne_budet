@@ -8,7 +8,7 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="Theme.DNB" parent="Base.Theme.Weathernaut" />
+    <style name="Theme.DNB" parent="Base.Theme.DNB" />
 
     <style name="Theme.App.SplashScreen" parent="Theme.SplashScreen" >
         <item name="windowSplashScreenBackground">@color/white</item>

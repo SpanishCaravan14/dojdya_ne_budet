@@ -3,6 +3,7 @@ package com.example.dnb.data.repositories.weatherRepository
 import com.example.dnb.models.weatherInfo.WeatherInfoLocal
 import javax.inject.Inject
 import com.example.dnb.data.Result
+import com.example.dnb.models.weatherInfo.GeoWeatherModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Singleton
@@ -22,4 +23,9 @@ class WeatherRepository @Inject constructor(
            weatherNetworkDataSource.getWeather()
        }
 }
+    suspend fun getGeoWeather(geoWeatherModel: GeoWeatherModel) : Result <WeatherInfoLocal>{
+        return withContext(Dispatchers.IO){
+            weatherNetworkDataSource.getGeoWeather(geoWeatherModel)
+        }
+    }
 }

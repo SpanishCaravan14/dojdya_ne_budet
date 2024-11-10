@@ -195,7 +195,6 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         if (parsedTime != null) {
             val parsedCalendar = Calendar.getInstance()
             parsedCalendar.time = parsedTime
-            Log.d("timestring", timeString)
             return currentTime.get(Calendar.HOUR_OF_DAY) == parsedCalendar.get(Calendar.HOUR_OF_DAY)
         }
         return false
