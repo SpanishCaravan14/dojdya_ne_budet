@@ -7,7 +7,7 @@
     <string name="app_settings_button">Кнопка настроек</string>
     <string name="atmospheric_pressure_icon">Иконка атмосферного давления</string>
     <string name="back_button">Назад</string>
-    <string name="next_7_days">На следующей неделе</string>
+    <string name="next_7_days">Прогноз на неделю</string>
     <string name="tomorrow">Завтра</string>
     <string name="weather_icon">Weather Icon</string>
 
@@ -47,12 +47,26 @@
     <string name="something_went_wrong">Что-то пошло не так!</string>
     <string name="error_fetching_weather">Возникла ошибка при загрузке данных о погоде</string>
     <string name="now">Сейчас</string>
+
+    <!-- Дни недели -->
+    <string name="sunday">Воскресенье</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday">Суббота</string>
+
     <!-- Описание погоды -->
     <string name="clear">Ясная погода</string>
     <string name="clear_partly">Частично ясная погода</string>
     <string name="partly_cloudy">Немного облачно</string>
     <string name="overcast">Пасмурно</string>
     <string name="fog">Туман</string>
+    <string name="patchy_snow">Местами снег</string>
+    <string name="patchy_rain">Местами дождь</string>
+    <string name="patchy_sleet">Местами мокрый снег</string>
+    <string name="sleet">Мокрый снег</string>
     <string name="rime_fog">Инеистый туман</string>
     <string name="light_drizzle">Слабый моросящий дождь</string>
     <string name="moderate_drizzle">Умеренный моросящий дождь</string>
@@ -64,9 +78,11 @@
     <string name="heavy_rain">Проливной дождь</string>
     <string name="light_freezing_rain">Слабый ледяной дождь</string>
     <string name="heavy_freezing_rain">Сильный ледяной дождь</string>
+
     <string name="light_snow">Легкий снегопад</string>
     <string name="moderate_snow">Умеренный снегопад</string>
     <string name="heavy_snow">Сильный снегопад</string>
+    <string name="ice_pellets">Ледяные шарики</string>
     <string name="snow_grains">Снежные зерна</string>
     <string name="light_rain_showers">Слабый ливневый дождь</string>
     <string name="moderate_rain_showers">Умеренный ливневый дождь</string>
@@ -76,6 +92,12 @@
     <string name="slight_thunderstorm">Легкая гроза</string>
     <string name="moderate_thunderstorm">Гроза</string>
     <string name="heavy_thunderstorm">Сильная гроза</string>
+    <string name="light_sleet_shower">Небольшой дождь с мокрым снегом</string>
+    <string name="moderate_sleet_shower">Умеренный/сильный дождь с мокрым снегом</string>
+    <string name="light_show_thunder">Гроза со снегом</string>
+    <string name="heavy_show_thunder">Умеренная/сильная гроза со снегом</string>
     <string name="wrong_weather_code"></string>
+
+
 
 </resources>

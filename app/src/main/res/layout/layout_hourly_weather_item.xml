@@ -15,7 +15,7 @@
         android:id="@+id/weatherTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10:00 am"
+        android:text="10:00"
         android:textAlignment="center"
         android:ellipsize="end"
         android:fontFamily="@font/inter"

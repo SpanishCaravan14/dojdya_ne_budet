@@ -1,9 +1,10 @@
 package com.example.dnb.data.repositories.weatherRepository
 
-import com.example.dnb.models.weatherInfo.WeatherInfoLocal
+import com.example.dnb.models.weatherApi.localDataModels.WeatherInfoLocal
 import javax.inject.Inject
 import com.example.dnb.data.Result
-import com.example.dnb.models.weatherInfo.GeoWeatherModel
+import com.example.dnb.models.geoApi.localDataModels.GeoInfoLocal
+import com.example.dnb.models.weatherApi.localDataModels.WeatherWeekInfoLocal
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Singleton
@@ -17,15 +18,20 @@ import javax.inject.Singleton
 @Singleton
 class WeatherRepository @Inject constructor(
     val weatherNetworkDataSource: WeatherNetworkDataSource) {
-       
-   suspend fun getWeather() : Result<WeatherInfoLocal>{
-      return withContext(Dispatchers.IO){
-           weatherNetworkDataSource.getWeather()
-       }
-}
-    suspend fun getGeoWeather(geoWeatherModel: GeoWeatherModel) : Result <WeatherInfoLocal>{
+
+    suspend fun getWeather(llString : String) : Result<WeatherInfoLocal> {
         return withContext(Dispatchers.IO){
-            weatherNetworkDataSource.getGeoWeather(geoWeatherModel)
+            weatherNetworkDataSource.getWeather(llString)
+        }
+    }
+    suspend fun getWeatherWeek(llString: String) : Result<WeatherWeekInfoLocal>{
+        return withContext(Dispatchers.IO){
+            weatherNetworkDataSource.getWeatherWeek(llString)
+        }
+    }
+    suspend fun getGeo(q : String) : Result<List<GeoInfoLocal>>{
+        return withContext(Dispatchers.IO){
+            weatherNetworkDataSource.getGeo(q)
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.dnb.data
 
+import com.example.dnb.data.api.GeoService
 import com.example.dnb.data.api.WeatherService
+import com.example.dnb.data.api.WeatherWeekService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,12 +24,12 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    fun providesBaseUrl() : String = "https://weathernaut-backend.onrender.com"
+//    @Provides
+//    fun providesBaseUrl() : BASE_URL = "https://api.weatherapi.com/v1/"
 
     @Provides
     @Singleton
-    fun provideRetrofit(BASE_URL : String) : Retrofit {
+    fun provideRetrofit() : Retrofit {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(1, TimeUnit.MINUTES)
             .readTimeout(20, TimeUnit.SECONDS)
@@ -37,7 +39,7 @@ object AppModule {
         return Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
+            .baseUrl("https://api.weatherapi.com/v1/")
             .build()
     }
 
@@ -45,4 +47,11 @@ object AppModule {
     @Singleton
     fun provideWeatherService(retrofit : Retrofit) : WeatherService = retrofit.create(WeatherService::class.java)
 
+    @Provides
+    @Singleton
+    fun provideGeoService(retrofit : Retrofit) : GeoService = retrofit.create(GeoService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideWeatherWeekService(retrofit : Retrofit) : WeatherWeekService = retrofit.create(WeatherWeekService::class.java)
 }

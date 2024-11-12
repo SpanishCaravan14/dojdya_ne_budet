@@ -12,33 +12,33 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dnb.databinding.FragmentHomeBinding
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import java.util.TimeZone
-import com.example.dnb.models.weatherInfo.WeatherInfoLocal
+import com.example.dnb.models.weatherApi.localDataModels.WeatherInfoLocal
 import com.example.dnb.R
 import com.example.dnb.constants.WeatherConstants
 import com.example.dnb.constants.WeatherImageMapper
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.dnb.data.Result
-import com.example.dnb.models.weatherInfo.HourlyWeatherRVItem
+import com.example.dnb.models.HourlyWeatherRVItem
 import com.example.dnb.ui.adapters.HourlyWeatherRVAdapter
 
 @AndroidEntryPoint
 class HomeFragment : androidx.fragment.app.Fragment() {
 
-    private lateinit var binding: com.example.dnb.databinding.FragmentHomeBinding
+    private lateinit var binding: FragmentHomeBinding
 
    private val weatherViewModel: WeatherViewModel by activityViewModels()
     private lateinit var todayHourlyWeatherRVAdapter: HourlyWeatherRVAdapter
    private lateinit var tomorrowHourlyWeatherRVAdapter: HourlyWeatherRVAdapter
    //TODO = перенести это во viewmodel
-    private val todayHourlyWeatherRVModelList: ArrayList<com.example.dnb.models.weatherInfo.HourlyWeatherRVItem> = ArrayList()
-    private val tomorrowHourlyWeatherRVModelList:ArrayList<com.example.dnb.models.weatherInfo.HourlyWeatherRVItem> = ArrayList()
+    private val todayHourlyWeatherRVModelList: ArrayList<HourlyWeatherRVItem> = ArrayList()
+    private val tomorrowHourlyWeatherRVModelList:ArrayList<HourlyWeatherRVItem> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,19 +51,17 @@ class HomeFragment : androidx.fragment.app.Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 //        android.view.View.setOnClickListener {
 //            androidx.navigation.NavController.navigate(me.tangobee.weathernaut.R.id.action_homeFragment_to_next7DaysFragment)
 //        }
 //
-//        android.view.View.setOnClickListener {
-//            androidx.navigation.NavController.navigate(me.tangobee.weathernaut.R.id.action_homeFragment_to_settingsFragment)
-//        }
-//
-//        android.view.View.setOnClickListener {
-//            androidx.navigation.NavController.navigate(me.tangobee.weathernaut.R.id.action_homeFragment_to_searchFragment)
-//        }
-//
+        binding.weeklyIndicator.setOnClickListener{
+            findNavController().navigate(R.id.action_homeFragment_to_nextWeekFragment)
+        }
+        binding.searchCities.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
+
         binding.todayIndicator.setOnClickListener {
             changeIndicatorDotPosition(R.id.todayIndicator)
             binding.hourlyWeatherRV.swapAdapter(todayHourlyWeatherRVAdapter, false)
@@ -111,6 +109,7 @@ class HomeFragment : androidx.fragment.app.Fragment() {
                 }
             }
         }
+
     }
 
     private fun setCurrentWeatherUIInfo(weatherInfo: WeatherInfoLocal) {
@@ -125,45 +124,47 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         )
         binding.locationName.text = region
 
-        binding.date.text = weatherInfo.current_weather.current.time
-        binding.currentWeatherTemperature.text = weatherInfo.current_weather.current.temperature_2m.toInt().toString()
-        binding.weatherUnit.text = weatherInfo.current_weather.current_units.temperature_2m
-        binding.weatherIcon.setImageResource(WeatherImageMapper.getImageForWeatherCode(weatherInfo.current_weather.current.weather_code))
-        binding.currentWeatherType.text = resources.getString(WeatherConstants.getWeatherDescriptionResourceId(weatherInfo.current_weather.current.weather_code))
+        binding.date.text = weatherInfo.localDayTime
+        binding.currentWeatherTemperature.text = weatherInfo.currentWeather.tempC.toInt().toString()
+        binding.weatherUnit.text = "°C"
+        binding.weatherIcon.setImageResource(WeatherImageMapper.getImageForWeatherCode(weatherInfo.currentWeather.weather_code))
+        binding.currentWeatherType.text = resources.getString(WeatherConstants.getWeatherDescriptionResourceId(weatherInfo.currentWeather. weather_code))
 
-        val currentPressure = weatherInfo.current_weather.current.pressure_msl.toString() + weatherInfo.current_weather.current_units.pressure_msl
-        binding.pressureValue.text = currentPressure
 
-        val windPressure = weatherInfo.current_weather.current.wind_speed_10m.toString() + weatherInfo.current_weather.current_units.wind_speed_10m
-        binding.windValue.text = windPressure
-
-        val humidityPressure = weatherInfo.current_weather.current.relative_humidity_2m.toString() + weatherInfo.current_weather.current_units.relative_humidity_2m
-        binding.humidityValue.text = humidityPressure
+        binding.pressureValue.text = "${weatherInfo.currentWeather.pressure_msl} hPa"
+        binding.windValue.text = "${weatherInfo.currentWeather.wind_speed_10m} м/с"
+        binding.humidityValue.text = "${weatherInfo.currentWeather.relative_humidity_2m}"
     }
 
 
     private fun setHourlyRecyclerViewUIInfo(weatherInfo: WeatherInfoLocal) {
+        weatherInfo.currentWeather.tempC.toString()
+
         var currentHourlyWeatherItemPosition = 0
         todayHourlyWeatherRVModelList.clear()
         for(i in 0 .. 23) {
-            var time = weatherInfo.hourly_weather.hourly.time[i]
-            var isCurrent = false
-            if(isCurrentLocalTime(time)) {
-                isCurrent = true
+            var time = weatherInfo.hourlyWeather.time[i]
+            Log.d("hourly", "$time ${weatherInfo.hourlyWeather.weather_code[i]}")
+            val x = weatherInfo.localDayTime
+            //Т.к. данные в дневном прогнозе могу отличаться от текущих, передаем в адаптер иконку и температуру отдельно
+            if(time.equals(weatherInfo.localTime)) {
                 currentHourlyWeatherItemPosition = i
+                val weatherIcon = WeatherImageMapper.getImageForWeatherCode(weatherInfo.currentWeather.weather_code)
+                val weatherTemp = weatherInfo.currentWeather.tempC
+                todayHourlyWeatherRVModelList.add(HourlyWeatherRVItem(time, weatherIcon, "${weatherTemp.toInt()}°", isCurrent = true))
+                continue
             }
 
-            val weatherIcon = WeatherImageMapper.getImageForWeatherCode(weatherInfo.hourly_weather.hourly.weather_code[i])
-            val weatherTemp = weatherInfo.hourly_weather.hourly.temperature_2m[i]
-
-            todayHourlyWeatherRVModelList.add(HourlyWeatherRVItem(time, weatherIcon, "${weatherTemp.toInt()}°", isCurrent))
+            val weatherIcon = WeatherImageMapper.getImageForWeatherCode(weatherInfo.hourlyWeather.weather_code[i])
+            val weatherTemp = weatherInfo.hourlyWeather.temperature_2m[i]
+            todayHourlyWeatherRVModelList.add(HourlyWeatherRVItem(time, weatherIcon, "${weatherTemp.toInt()}°", isCurrent = false))
         }
 
         tomorrowHourlyWeatherRVModelList.clear()
         for(i in 24 .. 47) {
-            val time = weatherInfo.hourly_weather.hourly.time[i]
-            val weatherIcon = WeatherImageMapper.getImageForWeatherCode(weatherInfo.hourly_weather.hourly.weather_code[i])
-            val weatherTemp = weatherInfo.hourly_weather.hourly.temperature_2m[i]
+            val time = weatherInfo.hourlyWeather.time[i]
+            val weatherIcon = WeatherImageMapper.getImageForWeatherCode(weatherInfo.hourlyWeather.weather_code[i])
+            val weatherTemp = weatherInfo.hourlyWeather.temperature_2m[i]
             tomorrowHourlyWeatherRVModelList.add(HourlyWeatherRVItem(time, weatherIcon, "${weatherTemp.toInt()}°", false))
         }
 
@@ -187,16 +188,4 @@ class HomeFragment : androidx.fragment.app.Fragment() {
         constraintSet.applyTo(binding.homeFragmentLayout)
     }
 
-    private fun isCurrentLocalTime(timeString: String): Boolean {
-        val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
-        val currentTime = Calendar.getInstance()
-        val parsedTime = sdf.parse(timeString)
-
-        if (parsedTime != null) {
-            val parsedCalendar = Calendar.getInstance()
-            parsedCalendar.time = parsedTime
-            return currentTime.get(Calendar.HOUR_OF_DAY) == parsedCalendar.get(Calendar.HOUR_OF_DAY)
-        }
-        return false
-    }
 }

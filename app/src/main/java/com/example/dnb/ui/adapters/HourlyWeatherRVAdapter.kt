@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dnb.R
-import com.example.dnb.models.weatherInfo.HourlyWeatherRVItem
+import com.example.dnb.models.HourlyWeatherRVItem
 
 
 /**

@@ -1,8 +1,6 @@
 package com.example.dnb.ui
 
 import android.annotation.SuppressLint
-import android.location.Address
-import android.location.Geocoder
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,10 +8,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dnb.data.repositories.weatherRepository.WeatherRepository
-import com.example.dnb.models.weatherInfo.WeatherInfoLocal
+import com.example.dnb.models.weatherApi.localDataModels.WeatherInfoLocal
 import kotlinx.coroutines.launch
 import com.example.dnb.data.Result
-import com.example.dnb.models.weatherInfo.GeoWeatherModel
+import com.example.dnb.models.geoApi.localDataModels.GeoInfoLocal
+import com.example.dnb.models.weatherApi.localDataModels.WeatherWeekInfoLocal
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -33,34 +32,55 @@ class WeatherViewModel @Inject constructor(val weatherRepository : WeatherReposi
     private val _weatherResult = MutableLiveData<Result<WeatherInfoLocal>>()
     val weatherResult : LiveData<Result<WeatherInfoLocal>> = _weatherResult
 
+    private val _weatherWeekResult = MutableLiveData<Result<WeatherWeekInfoLocal>>()
+    val weatherWeekResult : LiveData<Result<WeatherWeekInfoLocal>> = _weatherWeekResult
+
     private val _locationInfo = MutableLiveData<Location>()
     val locationInfo : LiveData<Location> = _locationInfo
 
-    private val _geoWeatherModel = MutableLiveData<GeoWeatherModel>()
-    val geoWeatherModel : LiveData<GeoWeatherModel> = _geoWeatherModel
+    private val _geoResult = MutableLiveData<Result<List<GeoInfoLocal>>>()
+    val geoResult : LiveData<Result<List<GeoInfoLocal>>> = _geoResult
 
     /**
      * В coroutine scope viewModelScope
      * (учитывает жизненный цикл viewModel и отменит выполнение функции если viewModel перестанет существовать)
      * запускается функция по получению данных о погоде, значение присваивается MutableLiveData объекту
      */
+
     fun getWeather(){
         viewModelScope.launch{
-            val weatherResult = weatherRepository.getWeather()
+            val llString = "${locationInfo.value!!.latitude} ${locationInfo.value!!.longitude}"
+            Log.d("llString", llString)
+            val weatherResult =  weatherRepository.getWeather(llString)
             _weatherResult.value = weatherResult
+
+            val weatherWeekResult = getWeatherWeek(llString)
+            _weatherWeekResult.value = weatherWeekResult
+            Log.d("weather weekResult", weatherWeekResult.toString())
+
+        }
+    }
+    //Метод используется, когда пользователь сам выбирает интересующий его город из списка
+    fun getGeoWeather(llString : String){
+        viewModelScope.launch{
+            val weatherResult = weatherRepository.getWeather(llString)
+            Log.d("weatherres", weatherResult.toString())
+            _weatherResult.value = weatherResult
+
+            val weatherWeekResult = getWeatherWeek(llString)
+            _weatherWeekResult.value = weatherWeekResult
+        }
+    }
+    suspend fun getWeatherWeek(llString: String) : Result<WeatherWeekInfoLocal>{
+        return weatherRepository.getWeatherWeek(llString)
+    }
+    fun getGeo(q : String){
+        viewModelScope.launch{
+            val geoResult = weatherRepository.getGeo(q)
+            _geoResult.value = geoResult
         }
     }
 
-    fun getGeoWeather(geoWeatherModel: GeoWeatherModel){
-        if(locationInfo.value!=null){
-            viewModelScope.launch{
-                val geoWeatherResult = weatherRepository.getGeoWeather(
-                    geoWeatherModel
-                )
-                _weatherResult.value = geoWeatherResult
-            }
-        }
-    }
 
     /**
      * Функция для получения данных о местоположении через сервис Google
@@ -84,23 +104,7 @@ class WeatherViewModel @Inject constructor(val weatherRepository : WeatherReposi
             }
         }
     }
-    fun setGeoModel(geocoder: Geocoder, location : Location) {
-        viewModelScope.launch{
-            var addressList : List<Address> = listOf ()
-            val fetchingAddressJob = launch(Dispatchers.IO){
-                addressList = geocoder.getFromLocation(location.latitude, location.longitude, 1)!!
-            }
-            fetchingAddressJob.join()
-           _geoWeatherModel.value = GeoWeatherModel(
-               ll = listOf<Double>(location.longitude, location.latitude),
-               city= addressList[0].locality.toString(),
-                   country=addressList[0].countryName.toString(),
-               timezone = location.time.toString()
-           )
-            Log.d("currentLocation", "${location.latitude.toString()} ${location.longitude} ${location.time}")
-            Log.d("addresslist", addressList.toString())
-        }
-    }
+
     }
 
 //
